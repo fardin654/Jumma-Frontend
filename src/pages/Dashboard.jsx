@@ -27,7 +27,8 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Divider
+  Divider,
+  useMediaQuery 
 } from '@mui/material';
 import { MembersContext } from '../context/MembersContext';
 import { RoundsContext } from '../context/RoundsContext';
@@ -51,7 +52,7 @@ const Dashboard = () => {
   const [selectedRound, setSelectedRound] = useState(null);
   const navigate = useNavigate();
   const theme = useTheme();
-
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
 
   useEffect(() => {
@@ -111,6 +112,7 @@ const Dashboard = () => {
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
         <Typography variant="h5">No active round found</Typography>
         <Button
+          size={isMobile ? "small" : "medium"}
           variant="contained"
           color="primary"
           onClick={() => handleNewRound()}
@@ -133,20 +135,22 @@ const Dashboard = () => {
         width: '100%',
         maxWidth: '1800px'
       }}>
-      <Grid container spacing={5} justify-content="space-between" >
+      <Grid container spacing={{ xs: 2, md: 3 }} justify-content="space-between" >
         {/* Header Section */}
-        <Grid item xs={12} sx={{ minWidth: 570 }}>
+        <Grid item xs={12} sx={{ minWidth: { xs: 1, md: 570 } }}>
           <Box sx={{
-                height: 150, 
+                height: { xs: 'auto', md: 150 },
                 display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' }, 
                 justifyContent: 'space-between', 
-                alignItems: 'center',
-                padding: 2,
+                alignItems: { xs: 'flex-start', md: 'center' },
+                padding: { xs: 1, md: 2 },
+                gap: { xs: 2, md: 0 },
                 backgroundColor: '#e6f7ff',
                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)'
               }}>
             <Box>
-              <Typography variant="h4" fontWeight="bold">
+              <Typography variant="h4" sx={{ fontSize: { xs: '1.3rem', sm: '1.6rem', md: '2rem' }, fontWeight: "bold" }} fontWeight="bold">
                 Round {round.roundNumber}
               </Typography>
               <Typography variant="subtitle1" color="text.secondary">
@@ -159,7 +163,7 @@ const Dashboard = () => {
               </Typography>
             </Box>
 
-            <FormControl sx={{ minWidth: 250 }} size="small">
+            <FormControl sx={{ minWidth: 250, width: { xs: '100%', md: 'auto' }, mt: { xs: 2, md: 0 } }} size="small">
               <InputLabel>Select Round</InputLabel>
               <Select
                 value={selectedRound || ''}
@@ -187,7 +191,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid container spacing={2} alignItems="stretch">
-          <Grid item xs={12} md={4} sx={{width: 265}}>
+          <Grid item xs={12} sm={4} md={4} sx={{ minWidth: { xs: 1, md: 270 }}}>
             <Card sx={{ height: '100%',backgroundColor: '#90EE90' }}>
               <CardHeader
                 avatar={
@@ -198,14 +202,14 @@ const Dashboard = () => {
                 sx={{ py: 1 }}
               />
               <CardContent>
-                <Typography variant="h4" fontWeight="bold" sx={{ fontSize: "1.8rem" }}>
+                <Typography variant="h4" sx={{ fontSize: { xs: '1.3rem', sm: '1.6rem', md: '2rem' }, fontWeight: "bold" }} fontWeight="bold" >
                   ₹{balance}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={4} sx={{width: 265}}>
+          <Grid item xs={12} sm={4} md={4} sx={{ minWidth: { xs: 1, md: 270 }}}>
             <Card sx={{ height: '100%', backgroundColor: '#90EE90'}}>
               <CardHeader
                 avatar={
@@ -216,14 +220,14 @@ const Dashboard = () => {
                 sx={{ py: 1 }}
               />
               <CardContent>
-                <Typography variant="h4" fontWeight="bold" sx={{ fontSize: "1.8rem" }}>
+                <Typography variant="h4" sx={{ fontSize: { xs: '1.3rem', sm: '1.6rem', md: '2rem' }, fontWeight: "bold" }} fontWeight="bold">
                   ₹{totalExpenses}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={4} sx={{width: 265}}>
+          <Grid item xs={12} sm={4} md={4} sx={{ minWidth: { xs: 1, md: 270 }}}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#90EE90' }}>
               <CardHeader
                 avatar={
@@ -234,7 +238,7 @@ const Dashboard = () => {
                 sx={{ py: 1 }}
               />
               <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h5" fontWeight="bold" sx={{ fontSize: "1.8rem" }}>
+                <Typography variant="h5" sx={{ fontSize: { xs: '1.3rem', sm: '1.6rem', md: '2rem' }, fontWeight: "bold" }} fontWeight="bold">
                   ₹{totalPaid}
                 </Typography>
                 <Box display="flex" gap={1} mt={1}>
@@ -248,8 +252,8 @@ const Dashboard = () => {
         </Grid>
 
         {/* Next to Pay Section */}
-        <Grid item xs={12} md={4} sx={{ minWidth: 380 }}>
-          <Card elevation={3} sx={{ height: '100%', backgroundColor: '#e6f7ff' }}>
+        <Grid item xs={12} md={4} sx={{ minWidth: { xs: 1, md: 250 }}}>
+          <Card elevation={3} sx={{ height: '100%', backgroundColor: '#e6f7ff', minWidth: { xs: 'auto', md: 380 }}} >
             <CardHeader
               title="Next to Pay"
               titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }}
@@ -314,13 +318,14 @@ const Dashboard = () => {
 
 
         {/* Payments Table */}
-        <Grid item xs={12} md={6} sx={{minWidth: 1000, marginLeft: 2}}>
+        <Grid item xs={12} md={8} sx={{ minWidth: { xs: 1, md: 1050 }}}>
           <Card elevation={3} sx={{ height: '100%',backgroundColor: '#e6f7ff' }}>
             <CardHeader
               title={`Member Payments for Round ${round.roundNumber}`}
               action={
                 <Box display="flex" gap={1}>
                   <Button 
+                    size={isMobile ? "small" : "medium"}
                     variant="outlined" 
                     onClick={() => navigate(`/paymentsList/${round.roundNumber}`)} 
                   >
@@ -329,9 +334,9 @@ const Dashboard = () => {
                 </Box>
               }
             />
-            <CardContent>
-              <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-                <Table stickyHeader size="small">
+            <CardContent sx={{ overflowX: 'auto' }}>
+              <TableContainer component={Paper} sx={{ maxHeight: 500, width: '100%', overflowX: 'auto' }}>
+                <Table stickyHeader size="small" sx={{ minWidth: 650 }}>
                   <TableHead>
                     <TableRow>
                       <TableCell>Member</TableCell>
@@ -358,7 +363,9 @@ const Dashboard = () => {
                           <TableCell align="center">
                             <Typography
                               variant="body2"
+
                               sx={{
+                                fontSize: { xs: '0.75rem', md: '1rem' } ,
                                 minWidth: 120,
                                 px: 1,
                                 py: 0.5,
@@ -429,18 +436,18 @@ const Dashboard = () => {
         </Grid>
 
         {/* Expenses Table */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} sx={{ minWidth: { xs: 1, md: 1 }}}>
           <Card elevation={3} sx={{ height: '100%', backgroundColor: '#e6f7ff' }}>
             <CardHeader
               title={`Expense Records for Round ${round.roundNumber}`}
               action={
-                <Button variant="outlined" color="primary" onClick={() => navigate('/add-expense')}>
+                <Button size="small" variant="outlined" color="primary" onClick={() => navigate('/add-expense')}>
                   Add Expense
                 </Button>
               }
             />
-            <CardContent>
-              <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+            <CardContent sx={{ overflowX: 'auto' }}>
+              <TableContainer component={Paper} sx={{ maxHeight: 500, width: '100%', overflowX: 'auto' }}>
                 <Table stickyHeader size="small">
                   <TableHead>
                     <TableRow>
@@ -459,7 +466,7 @@ const Dashboard = () => {
                             <Chip label={`₹${expense.amount}`} color="primary" size="small" />
                           </TableCell>
                           <TableCell>
-                            <Chip label={expense.balanceLeft} />
+                            <Chip label={`₹${expense.balanceLeft}`} color="error" size="small"/>
                           </TableCell>
                           <TableCell>
                             {new Date(expense.date).toLocaleDateString('en-GB', {
