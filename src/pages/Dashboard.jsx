@@ -451,29 +451,40 @@ const Dashboard = () => {
                 <Table stickyHeader size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Description</TableCell>
+                      <TableCell>Date</TableCell>
                       <TableCell align="right">Amount Paid</TableCell>
                       <TableCell>Balance Left</TableCell>
-                      <TableCell>Date</TableCell>
+                      <TableCell>Description</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {round.Expenses && round.Expenses.length > 0 ? (
                       round.Expenses.map((expense, idx) => (
                         <TableRow key={idx} hover>
-                          <TableCell>{expense.description}</TableCell>
+                          <TableCell>
+                            <Chip
+                              label={new Date(expense.date).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                              })}
+                              variant="filled"
+                              size="small"
+                              color="default"
+                              sx={{
+                                backgroundColor: '#f5f5f5',
+                                fontWeight: 500
+                              }}
+                            />
+                          </TableCell>
                           <TableCell align="right">
                             <Chip label={`₹${expense.amount}`} color="primary" size="small" />
                           </TableCell>
                           <TableCell>
                             <Chip label={`₹${expense.balanceLeft}`} color="error" size="small"/>
                           </TableCell>
-                          <TableCell>
-                            {new Date(expense.date).toLocaleDateString('en-GB', {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            })}
+                          <TableCell sx={{ minWidth: 300,whiteSpace: 'normal', wordBreak: 'break-word'}}>
+                            {expense.description}
                           </TableCell>
                         </TableRow>
                       ))
