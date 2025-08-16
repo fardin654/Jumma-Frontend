@@ -29,6 +29,9 @@ import { RoundsContext } from '../context/RoundsContext';
 import { WalletContext } from '../context/WalletContext';
 import { useNavigate } from 'react-router-dom';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import PaymentIcon from '@mui/icons-material/Payment';
+import PaymentsIcon from '@mui/icons-material/Payments';
 
 const Dashboard = () => {
   const { members } = useContext(MembersContext);
@@ -177,9 +180,16 @@ const Dashboard = () => {
         <Grid container spacing={2} alignItems="stretch">
           <Grid item xs={12} md={4} sx={{width: 265}}>
             <Card sx={{ height: '100%',backgroundColor: '#90EE90' }}>
-              <CardHeader title="Wallet Balance" sx={{ py: 1 }} />
+              <CardHeader
+                avatar={
+                  <AccountBalanceWalletIcon sx={{ fontSize: 40 }} />   
+                }
+                title="Wallet Balance"
+                titleTypographyProps={{ sx: { fontSize: "1.3rem", fontWeight: "bold" } }}
+                sx={{ py: 1 }}
+              />
               <CardContent>
-                <Typography variant="h4" fontWeight="bold">
+                <Typography variant="h4" fontWeight="bold" sx={{ fontSize: "1.8rem" }}>
                   ₹{balance}
                 </Typography>
               </CardContent>
@@ -188,9 +198,16 @@ const Dashboard = () => {
 
           <Grid item xs={12} md={4} sx={{width: 265}}>
             <Card sx={{ height: '100%', backgroundColor: '#90EE90'}}>
-              <CardHeader title="Total Expenses" sx={{ py: 1 }} />
+              <CardHeader
+                avatar={
+                  <PaymentIcon sx={{ fontSize: 40 }} />  
+                }
+                title="Total Expenses"
+                titleTypographyProps={{ sx: { fontSize: "1.3rem", fontWeight: "bold" } }}
+                sx={{ py: 1 }}
+              />
               <CardContent>
-                <Typography variant="h4" fontWeight="bold">
+                <Typography variant="h4" fontWeight="bold" sx={{ fontSize: "1.8rem" }}>
                   ₹{totalExpenses}
                 </Typography>
               </CardContent>
@@ -199,9 +216,16 @@ const Dashboard = () => {
 
           <Grid item xs={12} md={4} sx={{width: 265}}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#90EE90' }}>
-              <CardHeader title="Payments Collected" sx={{ py: 1 }} />
+              <CardHeader
+                avatar={
+                  <PaymentsIcon sx={{ fontSize: 40 }} />   
+                }
+                title="Payments Collected"
+                titleTypographyProps={{ sx: { fontSize: "1.3rem", fontWeight: "bold" } }} 
+                sx={{ py: 1 }}
+              />
               <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h5" fontWeight="bold">
+                <Typography variant="h5" fontWeight="bold" sx={{ fontSize: "1.8rem" }}>
                   ₹{totalPaid}
                 </Typography>
                 <Box display="flex" gap={1} mt={1}>
