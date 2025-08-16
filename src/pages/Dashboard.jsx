@@ -277,9 +277,9 @@ const Dashboard = () => {
                                   color="text.primary"
                                 >
                                   {new Date(payment.date).toLocaleDateString('en-GB', {
-                                    weekday: 'short',
-                                    day: 'numeric',
+                                    day: '2-digit',
                                     month: 'short',
+                                    year: 'numeric'
                                   })}
                                 </Typography>
                                 {` - ₹${payment.amount} paid`}

@@ -82,7 +82,11 @@ const MemberPayments = () => {
                 <TableRow key={index}>
                   <TableCell>Round {payment.round}</TableCell>
                   <TableCell>
-                    {new Date(payment.date).toLocaleDateString()}
+                    {new Date(payment.date).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                              })}
                   </TableCell>
                   <TableCell align="right">₹{payment.amount.toFixed(2)}</TableCell>
                   <TableCell>
