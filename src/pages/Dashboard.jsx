@@ -23,6 +23,11 @@ import {
   CardHeader,
   CardContent,
   Container,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider
 } from '@mui/material';
 import { MembersContext } from '../context/MembersContext';
 import { RoundsContext } from '../context/RoundsContext';
@@ -92,10 +97,14 @@ const Dashboard = () => {
     { paid: 0, pending: 0, partial: 0 }
   );
 
-  // Sort payments by date in ascending order
   const sortedPayments = round?.payments?.slice().sort((a, b) => {
     return new Date(a.date) - new Date(b.date);
   }) || [];
+
+  const nextToPay = [...sortedPayments]
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .filter(payment => payment.status === 'pending')
+    .slice(0, 2);
 
   if (!round) {
     return (
@@ -238,12 +247,77 @@ const Dashboard = () => {
           </Grid>
         </Grid>
 
+        {/* Next to Pay Section */}
+        <Grid item xs={12} md={4} sx={{ minWidth: 380 }}>
+          <Card elevation={3} sx={{ height: '100%', backgroundColor: '#e6f7ff' }}>
+            <CardHeader
+              title="Next to Pay"
+              titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }}
+            />
+            <CardContent>
+              {nextToPay.length > 0 ? (
+                <List>
+                  {nextToPay.map((payment, index) => {
+                    const member = members.find((m) => m.name === payment.member);
+                    return (
+                      <React.Fragment key={payment._id}>
+                        <ListItem>
+                          <ListItemAvatar>
+                            <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
+                              {member?.name?.charAt(0)}
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={member?.name}
+                            secondary={
+                              <>
+                                <Typography
+                                  component="span"
+                                  variant="body2"
+                                  color="text.primary"
+                                >
+                                  {new Date(payment.date).toLocaleDateString('en-GB', {
+                                    weekday: 'short',
+                                    day: 'numeric',
+                                    month: 'short',
+                                  })}
+                                </Typography>
+                                {` - ₹${payment.amount} paid`}
+                              </>
+                            }
+                          />
+                          <Chip
+                            label={payment.status}
+                            color={
+                              payment.status === 'paid'
+                                ? 'success'
+                                : payment.status === 'partial'
+                                ? 'warning'
+                                : 'error'
+                            }
+                            size="small"
+                          />
+                        </ListItem>
+                        {index < nextToPay.length - 1 && <Divider variant="inset" component="li" />}
+                      </React.Fragment>
+                    );
+                  })}
+                </List>
+              ) : (
+                <Typography color="text.secondary" align="center">
+                  No payment records found
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
 
         {/* Payments Table */}
-        <Grid item xs={12} md={6} sx={{minWidth: 800}}>
+        <Grid item xs={12} md={6} sx={{minWidth: 1000, marginLeft: 2}}>
           <Card elevation={3} sx={{ height: '100%',backgroundColor: '#e6f7ff' }}>
             <CardHeader
-              title="Member Payments"
+              title={`Member Payments for Round ${round.roundNumber}`}
               action={
                 <Box display="flex" gap={1}>
                   <Button 
@@ -355,10 +429,10 @@ const Dashboard = () => {
         </Grid>
 
         {/* Expenses Table */}
-        <Grid item xs={12} sx={{maxWidth: 600}} md={6}>
+        <Grid item xs={12} md={6}>
           <Card elevation={3} sx={{ height: '100%', backgroundColor: '#e6f7ff' }}>
             <CardHeader
-              title="Expense Records"
+              title={`Expense Records for Round ${round.roundNumber}`}
               action={
                 <Button variant="outlined" color="primary" onClick={() => navigate('/add-expense')}>
                   Add Expense
