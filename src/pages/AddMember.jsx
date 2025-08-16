@@ -19,7 +19,6 @@ const AddMember = () => {
     e.preventDefault();
     try {
       await addMember({ name, balance });
-      alert("New Member Added")
       navigate('/');
     } catch (err) {
       console.error(err);

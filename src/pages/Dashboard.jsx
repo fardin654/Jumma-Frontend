@@ -258,12 +258,13 @@ const Dashboard = () => {
                             </Box>
                           </TableCell>
                           <TableCell align="center">
-                            <Select
-                              value={payment.status}
-                              onChange={(e) => handlePaymentUpdate(payment._id, 'status', e.target.value)}
-                              size="small"
+                            <Typography
+                              variant="body2"
                               sx={{
                                 minWidth: 120,
+                                px: 1,
+                                py: 0.5,
+                                borderRadius: 1,
                                 backgroundColor:
                                   payment.status === 'paid'
                                     ? theme.palette.success.light
@@ -272,11 +273,10 @@ const Dashboard = () => {
                                     : theme.palette.warning.light,
                               }}
                             >
-                              <MenuItem value="pending">Pending</MenuItem>
-                              <MenuItem value="paid">Paid</MenuItem>
-                              <MenuItem value="partial">Partial</MenuItem>
-                            </Select>
+                              {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                            </Typography>
                           </TableCell>
+
                           <TableCell align="right">
                             <TextField
                               type="number"
@@ -331,7 +331,7 @@ const Dashboard = () => {
         </Grid>
 
         {/* Expenses Table */}
-        <Grid item xs={12} sx={{minWidth: 597}} md={6}>
+        <Grid item xs={12} sx={{maxWidth: 600}} md={6}>
           <Card elevation={3} sx={{ height: '100%', backgroundColor: '#e6f7ff' }}>
             <CardHeader
               title="Expense Records"

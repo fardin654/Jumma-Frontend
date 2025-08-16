@@ -23,7 +23,6 @@ function App() {
       <MembersProvider>
         <RoundsProvider>
         <ExpensesProvider>
-            <WalletProvider>
             <PaymentsProvider>
               <PaymentsListProvider>
             <div className="App">
@@ -42,7 +41,6 @@ function App() {
             </div>
             </PaymentsListProvider>
             </PaymentsProvider>
-            </WalletProvider>
         </ExpensesProvider>
         </RoundsProvider>
       </MembersProvider>
