@@ -9,7 +9,7 @@ export const MembersProvider = ({ children }) => {
 
   const fetchMembers = async () => {
     try {
-      const res = await axios.get('https://jumma-backend.onrender.com/api/members');
+      const res = await axios.get('https://jumma-backend-vercel.vercel.app/api/members');
       setMembers(res.data);
       setLoading(false);
     } catch (err) {
@@ -20,7 +20,7 @@ export const MembersProvider = ({ children }) => {
 
   const addMember = async (member) => {
     try {
-      const res = await axios.post('https://jumma-backend.onrender.com/api/members', member);
+      const res = await axios.post('https://jumma-backend-vercel.vercel.app/api/members', member);
       setMembers([...members, res.data]);
       return res.data;
     } catch (err) {
@@ -31,7 +31,7 @@ export const MembersProvider = ({ children }) => {
 
   const updateMember = async (id, updates) => {
     try {
-      const res = await axios.patch(`https://jumma-backend.onrender.com/api/members/${id}`, updates);
+      const res = await axios.patch(`https://jumma-backend-vercel.vercel.app/api/members/${id}`, updates);
       setMembers(members.map(m => m._id === id ? res.data : m));
       return res.data;
     } catch (err) {

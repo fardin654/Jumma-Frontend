@@ -10,7 +10,7 @@ export const WalletProvider = ({ children }) => {
 
   const fetchWalletBalance = async () => {
     try {
-      const res = await axios.get("https://jumma-backend.onrender.com/api/wallets");
+      const res = await axios.get("https://jumma-backend-vercel.vercel.app/api/wallets");
       setBalance(res.data.Balance);
       console.log("Balance Fetched: ", balance);
       setLoading(false);
@@ -22,7 +22,7 @@ export const WalletProvider = ({ children }) => {
 
   const updateWalletBalance = async (newBalance) => {
     try {
-      const res = await axios.patch("https://jumma-backend.onrender.com/api/wallets", { Balance: newBalance });
+      const res = await axios.patch("https://jumma-backend-vercel.vercel.app/api/wallets", { Balance: newBalance });
       setBalance(res.data.Balance);
       return res.data;
     } catch (err) {

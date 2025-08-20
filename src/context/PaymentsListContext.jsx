@@ -13,7 +13,7 @@ export const PaymentsListProvider = ({ children }) => {
   const fetchPaymentsByMember = useCallback(async (name) => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://jumma-backend.onrender.com/api/payments/member/${name}`);
+      const response = await axios.get(`https://jumma-backend-vercel.vercel.app/api/payments/member/${name}`);
       setPayments(response.data.payments);
       setMember(response.data.member);
       setLoading(false);

@@ -17,7 +17,7 @@ export const ExpensesProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(`https://jumma-backend.onrender.com/api/rounds/${roundId}/expenses`, 
+      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/expenses`, 
               {description,amount,date,balanceLeft});
       
       setLoading(false);

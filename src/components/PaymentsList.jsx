@@ -35,7 +35,7 @@ function PaymentsList() {
     const fetchPayments = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`https://jumma-backend.onrender.com/api/payments/round/${roundNumber}`);
+        const res = await fetch(`https://jumma-backend-vercel.vercel.app/api/payments/round/${roundNumber}`);
         if (!res.ok) throw new Error('Failed to fetch payments');
         const data = await res.json();
         setPayments(data.payments);
