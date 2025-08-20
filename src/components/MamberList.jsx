@@ -43,7 +43,7 @@ const MembersList = () => {
           <TableHead>
             <TableRow>
               <TableCell>Member</TableCell>
-              <TableCell align="right">Balance</TableCell>
+              <TableCell>Balance</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Payments</TableCell>
             </TableRow>
@@ -59,7 +59,7 @@ const MembersList = () => {
                     {member.name}
                   </div>
                 </TableCell>
-                <TableCell align="right">
+                <TableCell>
                   ₹{member.balance.toFixed(2)}
                 </TableCell>
                 <TableCell>

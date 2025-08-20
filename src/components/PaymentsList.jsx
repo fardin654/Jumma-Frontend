@@ -131,10 +131,10 @@ function PaymentsList() {
             <Table>
               <TableHead sx={{ backgroundColor: theme.palette.grey[100] }}>
                 <TableRow>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Member</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }} align="right">Amount</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Amount</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }} align="right">Date</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -144,31 +144,6 @@ function PaymentsList() {
                     hover
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell>
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <Avatar sx={{ 
-                          width: 32, 
-                          height: 32, 
-                          bgcolor: theme.palette.primary.main,
-                          fontSize: '0.875rem'
-                        }}>
-                          {payment.member?.charAt(0)?.toUpperCase()}
-                        </Avatar>
-                        {payment.member}
-                      </Box>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography fontWeight="medium">
-                        ₹{payment.amount.toFixed(2)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        label={payment.amount >= 400 ? 'paid' : payment.amount > 0 ? 'partial' : 'pending'}
-                        color={payment.amount >= 400 ? 'success' : payment.amount > 0 ? 'warning' : 'default'}
-                        size="small"
-                      />
-                    </TableCell>
                     <TableCell>
                       <Chip
                         label={new Date(payment.date).toLocaleDateString('en-GB', {
@@ -185,6 +160,32 @@ function PaymentsList() {
                         }}
                       />
                     </TableCell>
+                    <TableCell>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Avatar sx={{ 
+                          width: 32, 
+                          height: 32, 
+                          bgcolor: theme.palette.primary.main,
+                          fontSize: '0.875rem'
+                        }}>
+                          {payment.member?.charAt(0)?.toUpperCase()}
+                        </Avatar>
+                        {payment.member}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography fontWeight="medium">
+                        ₹{payment.amount.toFixed(2)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={payment.amount >= 400 ? 'paid' : payment.amount > 0 ? 'partial' : 'pending'}
+                        color={payment.amount >= 400 ? 'success' : payment.amount > 0 ? 'warning' : 'default'}
+                        size="small"
+                      />
+                    </TableCell>
+                    
                   </TableRow>
                 ))}
               </TableBody>

@@ -73,7 +73,7 @@ const MemberPayments = () => {
               <TableRow>
                 <TableCell>Round</TableCell>
                 <TableCell>Date</TableCell>
-                <TableCell align="right">Amount</TableCell>
+                <TableCell>Amount</TableCell>
                 <TableCell>Status</TableCell>
               </TableRow>
             </TableHead>
@@ -88,7 +88,7 @@ const MemberPayments = () => {
                                 year: 'numeric'
                               })}
                   </TableCell>
-                  <TableCell align="right">₹{payment.amount.toFixed(2)}</TableCell>
+                  <TableCell>₹{payment.amount.toFixed(2)}</TableCell>
                   <TableCell>
                     <Chip
                       label={payment.amount >= 400 ? 'paid' : 'partial'}
