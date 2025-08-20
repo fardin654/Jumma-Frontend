@@ -169,12 +169,21 @@ function PaymentsList() {
                         size="small"
                       />
                     </TableCell>
-                    <TableCell align="right">
-                      {new Date(payment.date).toLocaleDateString('en-IN', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric'
-                      })}
+                    <TableCell>
+                      <Chip
+                        label={new Date(payment.date).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric'
+                        })}
+                        variant="filled"
+                        size="small"
+                        color="default"
+                        sx={{
+                          backgroundColor: '#f5f5f5',
+                          fontWeight: 500
+                        }}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
