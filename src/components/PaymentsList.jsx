@@ -185,7 +185,6 @@ function PaymentsList() {
                         size="small"
                       />
                     </TableCell>
-                    
                   </TableRow>
                 ))}
               </TableBody>
