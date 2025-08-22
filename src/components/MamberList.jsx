@@ -43,15 +43,15 @@ const MembersList = () => {
           <TableHead>
             <TableRow>
               <TableCell>Member</TableCell>
-              <TableCell>Balance</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Payments</TableCell>
+              <TableCell align="center">Balance</TableCell>
+              <TableCell align="center">Status</TableCell>
+              <TableCell align="center">Payments</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {members.map((member) => (
               <TableRow key={member._id} hover>
-                <TableCell onClick={() => navigate(`/members/${member._id}/payments`)} style={{ cursor: 'pointer' }}>
+                <TableCell onClick={() => navigate(`/members/${member.name}/payments`)} style={{ cursor: 'pointer' }}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar style={{ marginRight: '10px' }}>
                       {member.name.charAt(0)}
@@ -59,10 +59,10 @@ const MembersList = () => {
                     {member.name}
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   ₹{member.balance.toFixed(2)}
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                     <Chip
                         label={
                         member.balance === 0
@@ -80,7 +80,7 @@ const MembersList = () => {
                         }
                     />
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <Button 
                     size="small" 
                     variant="outlined"

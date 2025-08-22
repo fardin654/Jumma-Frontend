@@ -28,7 +28,8 @@ import {
   ListItemAvatar,
   ListItemText,
   Divider,
-  useMediaQuery 
+  useMediaQuery,
+  InputAdornment
 } from '@mui/material';
 import { MembersContext } from '../context/MembersContext';
 import { RoundsContext } from '../context/RoundsContext';
@@ -341,9 +342,9 @@ const Dashboard = () => {
                     <TableRow>
                       <TableCell>Member</TableCell>
                       <TableCell align="center">Status</TableCell>
-                      <TableCell align="right">Amount</TableCell>
-                      <TableCell align="right">Left to Pay</TableCell>
-                      <TableCell align="right">Date</TableCell>
+                      <TableCell align="center">Amount</TableCell>
+                      <TableCell align="center" sx={{width:"auto", whiteSpace: "nowrap"}}>Left to Pay</TableCell>
+                      <TableCell align="center">Date</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -352,7 +353,7 @@ const Dashboard = () => {
                       const balance = 400 - payment.amount<0? 0 : 400 - payment.amount; 
                       return (
                         <TableRow key={payment._id} hover>
-                          <TableCell>
+                          <TableCell onClick={() => navigate(`/members/${member.name}/payments`)} style={{ cursor: 'pointer' }}>
                             <Box display="flex" alignItems="center" gap={1}>
                               <Avatar sx={{ width: 32, height: 32, bgcolor: theme.palette.primary.main }}>
                                 {member?.name?.charAt(0)}
@@ -382,19 +383,25 @@ const Dashboard = () => {
                             </Typography>
                           </TableCell>
 
-                          <TableCell align="right">
+                         <TableCell align="center">
                             <TextField
-                              type="number"
                               value={payment.amount}
-                              onChange={(e) => handlePaymentUpdate(payment._id, 'amount', e.target.value)}
                               size="small"
-                              sx={{ width: 100 }}
+                              sx={{ width: 120 }}
                               InputProps={{
-                                startAdornment: '₹',
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                                inputProps: {
+                                  min: 0,
+                                  style: { textAlign: "right" }
+                                }
                               }}
                             />
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="center">
                             <Chip
                               label={`₹${balance}`}
                               color={
@@ -408,7 +415,7 @@ const Dashboard = () => {
                               size="small"
                             />
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="center">
                             <Chip
                               label={new Date(payment.date).toLocaleDateString('en-GB', {
                                 day: '2-digit',

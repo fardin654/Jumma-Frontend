@@ -80,7 +80,7 @@ const MemberPayments = () => {
             <TableBody>
               {payments.map((payment, index) => (
                 <TableRow key={index}>
-                  <TableCell sx={{fontSize: '0.800rem'}}>
+                  <TableCell sx={{width:"auto", whiteSpace: "nowrap"}}>
                     Round {payment.round}
                   </TableCell>
                   <TableCell>
