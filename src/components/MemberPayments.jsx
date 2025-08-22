@@ -80,13 +80,24 @@ const MemberPayments = () => {
             <TableBody>
               {payments.map((payment, index) => (
                 <TableRow key={index}>
-                  <TableCell>Round {payment.round}</TableCell>
+                  <TableCell sx={{fontSize: '0.800rem'}}>
+                    Round {payment.round}
+                  </TableCell>
                   <TableCell>
-                    {new Date(payment.date).toLocaleDateString('en-GB', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric'
-                              })}
+                    <Chip
+                      label={new Date(payment.date).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
+                      variant="filled"
+                      size="small"
+                      color="default"
+                      sx={{
+                        backgroundColor: '#f5f5f5',
+                        fontWeight: 500
+                      }}
+                    />
                   </TableCell>
                   <TableCell>₹{payment.amount.toFixed(2)}</TableCell>
                   <TableCell>
