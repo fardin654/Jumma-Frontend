@@ -483,7 +483,7 @@ const Dashboard = () => {
                           <TableCell>
                             <Chip label={`₹${expense.balanceLeft}`} color="error" size="small"/>
                           </TableCell>
-                          <TableCell sx={{ minWidth: 300,whiteSpace: 'normal', wordBreak: 'break-word'}}>
+                          <TableCell sx={{ minWidth: 275,whiteSpace: 'normal', wordBreak: 'break-word'}}>
                             {expense.description}
                           </TableCell>
                         </TableRow>
