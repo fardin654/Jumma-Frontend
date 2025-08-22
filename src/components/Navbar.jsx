@@ -42,9 +42,9 @@ const Navbar = () => {
           <Typography variant="h6" component="div" sx={{ 
             fontWeight: 700,
             letterSpacing: 0.5,
-            display: 'block'
+            display: { xs: 'none', sm: 'block' }
           }}>
-            {isMobile ? 'Jumma' : 'Jumma Expense'}
+            Jumma Expense
           </Typography>
         </Box>
 
