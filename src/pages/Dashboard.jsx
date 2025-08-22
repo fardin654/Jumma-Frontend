@@ -459,8 +459,8 @@ const Dashboard = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Date</TableCell>
-                      <TableCell align="right">Amount Paid</TableCell>
-                      <TableCell>Balance Left</TableCell>
+                      <TableCell align="center" sx={{width:"auto", whiteSpace: "nowrap"}}>Amount Paid</TableCell>
+                      <TableCell align="center" sx={{width:"auto", whiteSpace: "nowrap"}}>Balance Left</TableCell>
                       <TableCell>Description</TableCell>
                     </TableRow>
                   </TableHead>
@@ -484,10 +484,10 @@ const Dashboard = () => {
                               }}
                             />
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="center">
                             <Chip label={`₹${expense.amount}`} color="primary" size="small" />
                           </TableCell>
-                          <TableCell>
+                          <TableCell align="center">
                             <Chip label={`₹${expense.balanceLeft}`} color="error" size="small"/>
                           </TableCell>
                           <TableCell sx={{ minWidth: 275,whiteSpace: 'normal', wordBreak: 'break-word'}}>
