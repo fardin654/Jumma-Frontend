@@ -39,7 +39,7 @@ export const RoundsProvider = ({ children }) => {
 
   const createRound = async (fixedAmount) => {
     try {
-      const rounds = await axios.get('http://localhost:5000/api/rounds');
+      const rounds = await axios.get('https://jumma-backend-vercel.vercel.app/rounds');
       const nextRoundNumber = rounds.data.length > 0 
         ? Math.max(...rounds.data.map(r => r.roundNumber)) + 1 
         : 1;
@@ -49,7 +49,7 @@ export const RoundsProvider = ({ children }) => {
         fixed: fixedAmount
       };
 
-      const res = await axios.post('http://localhost:5000/api/rounds', roundData);
+      const res = await axios.post('https://jumma-backend-vercel.vercel.app/rounds', roundData);
       setRounds(prevRounds => [...prevRounds, res.data]);
       setCurrentRound(res.data);
       return res.data;
@@ -61,7 +61,7 @@ export const RoundsProvider = ({ children }) => {
 
   const updatePayment = async (roundId, paymentId, updates) => {
     try {
-      const res = await axios.patch(`http://localhost:5000/api/rounds/${roundId}/payments/${paymentId}`, updates);
+      const res = await axios.patch(`https://jumma-backend-vercel.vercel.app/rounds/${roundId}/payments/${paymentId}`, updates);
       
       setRounds(rounds.map(r => 
         r._id === roundId ? res.data : r
@@ -80,7 +80,7 @@ export const RoundsProvider = ({ children }) => {
 
   const completeRound = async (roundId) => {
     try {
-      const res = await axios.patch(`http://localhost:5000/api/rounds/${roundId}/complete`);
+      const res = await axios.patch(`https://jumma-backend-vercel.vercel.app/rounds/${roundId}/complete`);
       
       setRounds(rounds.map(r => 
         r._id === roundId ? res.data : r
