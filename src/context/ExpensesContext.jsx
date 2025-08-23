@@ -17,7 +17,9 @@ export const ExpensesProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/expenses`, 
+      // const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/expenses`, 
+      //         {description,amount,date,balanceLeft});
+      const response = await axios.post(`http://localhost:5000/api/rounds/${roundId}/expenses`, 
               {description,amount,date,balanceLeft});
       
       setLoading(false);
