@@ -12,7 +12,6 @@ export const RoundsProvider = ({ children }) => {
     try {
       const res = await axios.get('https://jumma-backend-vercel.vercel.app/api/rounds');
       setRounds(res.data);
-      console.log("Response data:", res.data, Array.isArray(res.data));
       
       // Find the most recent incomplete round
       const incompleteRound = res.data.find(r => !r.isCompleted);

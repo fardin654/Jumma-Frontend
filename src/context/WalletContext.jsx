@@ -12,7 +12,6 @@ export const WalletProvider = ({ children }) => {
     try {
       const res = await axios.get("https://jumma-backend-vercel.vercel.app/api/wallets");
       setBalance(res.data.Balance);
-      console.log("Balance Fetched: ", balance);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching wallet balance:", err);
