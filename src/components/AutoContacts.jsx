@@ -61,7 +61,7 @@ const AutoContactsList = () => {
                 <TableCell align="center">
                   {member.contact}
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ minWidth: 250,whiteSpace: 'normal', wordBreak: 'break-word'}}>
                     {member.description || '-'}
                 </TableCell>
               </TableRow>
