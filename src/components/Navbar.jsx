@@ -84,6 +84,18 @@ const Navbar = () => {
             </Button>
             <Button 
               component={Link} 
+              to="/members"
+              sx={{
+                color: 'text.primary',
+                '&:hover': {
+                  backgroundColor: theme.palette.action.hover
+                }
+              }}
+            >
+              Members
+            </Button>
+            <Button 
+              component={Link} 
               to="/add-member"
               sx={{
                 color: 'text.primary',
@@ -137,6 +149,14 @@ const Navbar = () => {
                 onClick={handleMenuClose}
               >
                 Contacts
+              </MenuItem>
+              <Divider />
+              <MenuItem 
+                component={Link} 
+                to="/members"
+                onClick={handleMenuClose}
+              >
+                Members
               </MenuItem>
               <Divider />
               <MenuItem 

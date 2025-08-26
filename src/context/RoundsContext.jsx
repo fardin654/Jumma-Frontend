@@ -38,19 +38,14 @@ export const RoundsProvider = ({ children }) => {
 
   const createRound = async (fixedAmount) => {
     try {
-      const rounds = await axios.get('https://jumma-backend-vercel.vercel.app/rounds');
-      const nextRoundNumber = rounds.data.length > 0 
-        ? Math.max(...rounds.data.map(r => r.roundNumber)) + 1 
-        : 1;
-      
       const roundData = {
-        roundNumber: nextRoundNumber,
         fixed: fixedAmount
       };
 
-      const res = await axios.post('https://jumma-backend-vercel.vercel.app/rounds', roundData);
+      const res = await axios.post('https://jumma-backend-vercel.vercel.app/api/rounds', roundData);
       setRounds(prevRounds => [...prevRounds, res.data]);
       setCurrentRound(res.data);
+      console.log("Response: ", res);
       return res.data;
     } catch (err) {
       console.error(err);
