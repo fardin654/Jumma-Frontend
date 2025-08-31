@@ -67,7 +67,7 @@ const Dashboard = ({AccessCode}) => {
     fetchRounds(AccessCode);
     fetchWalletBalance(AccessCode);
     fetchMembers(AccessCode);
-  }, [AccessCode, rounds, fetchRounds]);
+  }, [AccessCode, rounds, fetchRounds, fetchWalletBalance, fetchMembers]);
 
   const handleRoundChange = (e) => {
     const roundId = e.target.value;
