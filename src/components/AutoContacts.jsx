@@ -15,7 +15,8 @@ import {
   Button,
   Box,
   useMediaQuery,
-  useTheme
+  useTheme,
+  CircularProgress
 } from '@mui/material';
 import { AutoContactsContext } from '../context/AutoContactsContext';
 import { Link as RouterLink } from 'react-router-dom';
@@ -28,6 +29,7 @@ const AutoContactsList = ({AccessCode, Admin}) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect( () => {
+    if(AccessCode)
       fetchContacts(AccessCode);
   }, [AccessCode])
 
@@ -59,7 +61,22 @@ const AutoContactsList = ({AccessCode, Admin}) => {
   }
 
 
-  if (loading) return <div>Loading...</div>;
+    if (loading) {
+      return (
+        <Box 
+          display="flex" 
+          justifyContent="center" 
+          alignItems="center" 
+          minHeight="70vh" 
+          flexDirection="column"
+        >
+          <CircularProgress size={60} thickness={5} color="primary" />
+          <Typography variant="h6" mt={2} color="text.secondary">
+            Fetching Contacts...
+          </Typography>
+        </Box>
+      );
+    }
   if (error) return <div>Error: {error}</div>;
 
   return (

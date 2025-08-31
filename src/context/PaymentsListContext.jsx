@@ -13,20 +13,23 @@ export const PaymentsListProvider = ({ children }) => {
   const fetchRoundPayments = useCallback(async ({roundNumber, AccessCode}) => {
     try {
       setLoading(true);
-      const res = await axios.get(`https://jumma-backend.onrender.com/api/payments/round/${roundNumber}`,({params:{AccessCode: AccessCode}}));
-      if (!res.status === 200) throw new Error('Failed to fetch payments');
+      setError(null);
+      const res = await axios.get(`https://jumma-backend-vercel.vercel.app/api/payments/round/${roundNumber}`,({params:{AccessCode: AccessCode}}));
+      if (res.status !== 200) throw new Error('Failed to fetch payments');
+      setPayments(res.data.payments);
       return res.data;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
-      setLoading(false);
       throw err;
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const fetchPaymentsByMember = useCallback(async ({id, AccessCode}) => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://jumma-backend.onrender.com/api/payments/member/${id}`,({params:{AccessCode: AccessCode}}));
+      const response = await axios.get(`https://jumma-backend-vercel.vercel.app/api/payments/member/${id}`,({params:{AccessCode: AccessCode}}));
       setPayments(response.data.payments);
       setMember(response.data.member);
       setLoading(false);

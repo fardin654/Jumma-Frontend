@@ -30,7 +30,8 @@ import {
   ListItemText,
   Divider,
   useMediaQuery,
-  InputAdornment
+  InputAdornment,
+  CircularProgress
 } from '@mui/material';
 import { MembersContext } from '../context/MembersContext';
 import { RoundsContext } from '../context/RoundsContext';
@@ -53,6 +54,7 @@ const Dashboard = ({AccessCode}) => {
   const { balance, fetchWalletBalance } = useContext(WalletContext);
   const [selectedRound, setSelectedRound] = useState(null);
   const [nextCount, setNextCount] = useState(2);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -64,10 +66,17 @@ const Dashboard = ({AccessCode}) => {
   }, [currentRound, selectedRound]);
 
   useEffect(() => {
-    fetchRounds(AccessCode);
-    fetchWalletBalance(AccessCode);
-    fetchMembers(AccessCode);
-  }, [AccessCode, rounds, fetchRounds, fetchWalletBalance, fetchMembers]);
+    const fetchData = async () => {
+      setLoading(true);
+      await Promise.all([
+        fetchRounds(AccessCode),
+        fetchWalletBalance(AccessCode),
+        fetchMembers(AccessCode)
+      ]);
+      setLoading(false);
+    };
+    if (AccessCode) fetchData();
+  }, [AccessCode]);
 
   const handleRoundChange = (e) => {
     const roundId = e.target.value;
@@ -111,6 +120,24 @@ const Dashboard = ({AccessCode}) => {
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .filter(payment => payment.status === 'pending')
     .slice(0, nextCount);
+
+  if (loading) {
+    return (
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="70vh" 
+        flexDirection="column"
+      >
+        <CircularProgress size={60} thickness={5} color="primary" />
+        <Typography variant="h6" mt={2} color="text.secondary">
+          Fetching your dashboard...
+        </Typography>
+      </Box>
+    );
+  }
+
 
   if (!AccessCode) {
      return (

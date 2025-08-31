@@ -11,7 +11,7 @@ export const RequestsProvider = ({ children }) => {
   // 🔹 Get requests for a specific member
   const fetchRequestsByMember = async (memberId) => {
     try {
-      const res = await axios.get(`https://jumma-backend.onrender.com/api/requests/${memberId}`);
+      const res = await axios.get(`https://jumma-backend-vercel.vercel.app/api/requests/${memberId}`);
       setRequests(res.data.requests);
       return res.data.requests;
     } catch (err) {
@@ -24,7 +24,7 @@ export const RequestsProvider = ({ children }) => {
   // 🔹 Get all requests (Admin view) with AccessCode
   const fetchAllRequests = async (AccessCode) => {
     try {
-      const res = await axios.get(`https://jumma-backend.onrender.com/api/requests`, {
+      const res = await axios.get(`https://jumma-backend-vercel.vercel.app/api/requests`, {
         params: { AccessCode }
       });
       setRequests(res.data.requests);
@@ -40,7 +40,7 @@ export const RequestsProvider = ({ children }) => {
     try {
       setLoading
       console.log(requestData);
-      const res = await axios.post(`https://jumma-backend.onrender.com/api/requests`, requestData);
+      const res = await axios.post(`https://jumma-backend-vercel.vercel.app/api/requests`, requestData);
       setRequests([res.data, ...requests]); 
       setLoading
       return res.data;
@@ -55,7 +55,7 @@ export const RequestsProvider = ({ children }) => {
   const updateRequestStatus = async (id, { isApproved, AccessCode }) => {
     try {
       setLoading(true);
-      const res = await axios.patch(`https://jumma-backend.onrender.com/api/requests/${id}`, {
+      const res = await axios.patch(`https://jumma-backend-vercel.vercel.app/api/requests/${id}`, {
         isApproved,
         AccessCode,
       });

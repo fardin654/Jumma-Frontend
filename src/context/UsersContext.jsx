@@ -42,7 +42,7 @@ export const UsersProvider = ({ children }) => {
  const registerUser = async (username, email, password, accessCode) => {
   try {
     setLoading(true);
-    const response = await axios.post(`https://jumma-backend.onrender.com/api/user/register`, {
+    const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/user/register`, {
       username, email, password, AccessCode: accessCode
     });
 
@@ -67,7 +67,7 @@ export const UsersProvider = ({ children }) => {
   const loginUser = async (username, password) => {
     try {
       setLoading(true);
-      const response = await axios.post(`https://jumma-backend.onrender.com/api/user/login`,{email:username, password})
+      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/user/login`,{email:username, password})
         if(response.status === 200){
             const userData = {
               AccessCode: response.data.AccessCode,
@@ -93,7 +93,7 @@ export const UsersProvider = ({ children }) => {
   const EnterByAccessCode = async (accessCode) => {
     try{
         setLoading(true);
-        const response = await axios.post(`https://jumma-backend.onrender.com/api/user/authenticate`,{AccessCode: accessCode})
+        const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/user/authenticate`,{AccessCode: accessCode})
         if(response.status === 200){
             localStorage.setItem("userData", JSON.stringify({
                 AccessCode: accessCode,

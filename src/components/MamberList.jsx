@@ -19,7 +19,8 @@ import {
   DialogContent,
   DialogActions,
   useMediaQuery,
-  useTheme
+  useTheme,
+  CircularProgress
 } from '@mui/material';
 import { MembersContext } from '../context/MembersContext';
 import { Link as RouterLink } from 'react-router-dom';
@@ -53,8 +54,9 @@ const MembersList = ({ AccessCode, Admin }) => {
   };
 
   useEffect(() => {
-    fetchMembers(AccessCode);
-  }, [AccessCode, fetchMembers]);
+    if(AccessCode)
+      fetchMembers(AccessCode);
+  }, [AccessCode]);
 
   const handleOpenDialog = (member) => {
     setSelectedMember(member);
@@ -99,7 +101,22 @@ const MembersList = ({ AccessCode, Admin }) => {
     );
   }
 
-  if (loading) return <div>Loading...</div>;
+    if (loading) {
+      return (
+        <Box 
+          display="flex" 
+          justifyContent="center" 
+          alignItems="center" 
+          minHeight="70vh" 
+          flexDirection="column"
+        >
+          <CircularProgress size={60} thickness={5} color="primary" />
+          <Typography variant="h6" mt={2} color="text.secondary">
+            Fetching your dashboard...
+          </Typography>
+        </Box>
+      );
+    }
   if (error) return <div>Error: {error}</div>;
 
   return (

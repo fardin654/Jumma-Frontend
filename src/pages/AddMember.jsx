@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AddMember = ({AccessCode, Admin}) => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
   const { addMember, loading } = useContext(MembersContext);
   const navigate = useNavigate();
   const theme = useTheme();
@@ -43,6 +44,7 @@ const AddMember = ({AccessCode, Admin}) => {
     e.preventDefault();
     try {
       if(Admin === "YES"){
+        setSubmitting(true);
         await addMember({ name, balance, AccessCode });
         navigate('/members');
       } else {
@@ -50,6 +52,8 @@ const AddMember = ({AccessCode, Admin}) => {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -98,10 +102,10 @@ const AddMember = ({AccessCode, Admin}) => {
             variant="contained" 
             color="primary"
             style={{ marginTop: 20 }}
-            disabled={loading}
-            startIcon={loading ? <CircularProgress size={20} /> : null}
+            disabled={submitting}
+            startIcon={submitting ? <CircularProgress size={20} /> : null}
           >
-            {loading ? 'Processing...' : 'Add Member'}
+            {submitting ? 'Processing...' : 'Add Member'}
           </Button>
         </form>
       </Paper>

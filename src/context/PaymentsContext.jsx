@@ -19,7 +19,7 @@ export const PaymentsProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       console.log('Adding payment with data:', { amount, paidBy, roundId, date, AccessCode });
-      const response = await axios.post(`https://jumma-backend.onrender.com/api/rounds/${roundId}/payments`, {
+      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/payments`, {
         amount,
         paidBy,
         date,

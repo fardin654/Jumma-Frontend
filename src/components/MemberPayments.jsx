@@ -31,16 +31,23 @@ const MemberPayments = ({AccessCode}) => {
     fetchPaymentsByMember 
   } = usePaymentsList();
 
-  const { members, getMemberById, fetchMembers } = useContext(MembersContext);
+  const {getMemberById} = useContext(MembersContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchPaymentsByMember({ id, AccessCode });
-      const mem = await getMemberById(id);
-      setMember(mem[0]);
+      try {
+        const [paymentsRes, memberRes] = await Promise.all([
+          fetchPaymentsByMember({ id, AccessCode }),
+          getMemberById(id)
+        ]);
+        setMember(memberRes[0]);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
     };
 
-    fetchData();
+    if(id && AccessCode)
+      fetchData();
   }, [id, AccessCode, fetchPaymentsByMember]);
 
 

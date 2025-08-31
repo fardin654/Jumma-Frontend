@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  CircularProgress,
   useMediaQuery,
   useTheme
 } from '@mui/material';
@@ -37,8 +38,9 @@ const Rounds = ({ AccessCode, Admin }) => {
   const [selectedRoundId, setSelectedRoundId] = useState(null);
 
   useEffect(() => {
-    fetchRounds(AccessCode);
-  }, [fetchRounds, AccessCode]);
+    if(AccessCode)
+      fetchRounds(AccessCode);
+  }, [AccessCode]);
 
   const toastOptions = {
       position: "top-right",
@@ -111,7 +113,22 @@ const Rounds = ({ AccessCode, Admin }) => {
     );
   }
 
-  if (loading) return <div>Loading...</div>;
+    if (loading) {
+      return (
+        <Box 
+          display="flex" 
+          justifyContent="center" 
+          alignItems="center" 
+          minHeight="70vh" 
+          flexDirection="column"
+        >
+          <CircularProgress size={60} thickness={5} color="primary" />
+          <Typography variant="h6" mt={2} color="text.secondary">
+            Fetching Rounds data...
+          </Typography>
+        </Box>
+      );
+    }
 
   return (
     <Container maxWidth="lg">

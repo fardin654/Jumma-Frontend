@@ -39,8 +39,8 @@ const AddPayment = ({AccessCode, Admin}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      fetchMembers(AccessCode);
-      fetchRounds(AccessCode);
+      if(AccessCode)  fetchMembers(AccessCode);
+      if(AccessCode)  fetchRounds(AccessCode);
   }, [AccessCode])
 
   const handleSubmit = async (e) => {

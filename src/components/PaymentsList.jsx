@@ -29,29 +29,23 @@ function PaymentsList({AccessCode}) {
   const { roundNumber } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const {fetchRoundPayments} = usePaymentsList();
-  const {members, fetchMembers} = useContext(MembersContext);
+  const { members, fetchMembers } = useContext(MembersContext);
+  const { payments, fetchRoundPayments, loading, error } = usePaymentsList();
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        setLoading(true);
-        const data = await fetchRoundPayments({roundNumber, AccessCode});
-        setPayments(data.payments);
-        fetchMembers(AccessCode);
+        await fetchRoundPayments({ roundNumber, AccessCode });
+        await fetchMembers(AccessCode);
       } catch (error) {
         console.error("Error fetching payments:", error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
-    fetchPayments();
-  }, [roundNumber]);
+    if(roundNumber && AccessCode)
+        fetchPayments();
+  }, [roundNumber, AccessCode]);
+
 
   if (loading) {
     return (
