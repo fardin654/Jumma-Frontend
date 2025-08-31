@@ -143,11 +143,11 @@ const Rounds = ({ AccessCode, Admin }) => {
             {rounds.map((round) => (
               <TableRow key={round._id} hover>
                 <TableCell>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar style={{ marginRight: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer'  }}>
+                    <Avatar style={{ marginRight: '10px' }} onClick={() => navigate(`/paymentsList/${round.roundNumber}`)}>
                       {round.roundNumber}
                     </Avatar>
-                     <Typography variant="body1" noWrap>
+                     <Typography variant="body1" noWrap onClick={() => navigate(`/paymentsList/${round.roundNumber}`)}>
                       Round {round.roundNumber}
                     </Typography>
                   </div>
