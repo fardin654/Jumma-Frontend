@@ -147,7 +147,9 @@ const Rounds = ({ AccessCode, Admin }) => {
                     <Avatar style={{ marginRight: '10px' }}>
                       {round.roundNumber}
                     </Avatar>
-                    Round {round.roundNumber}
+                     <Typography variant="body1" noWrap>
+                      Round {round.roundNumber}
+                    </Typography>
                   </div>
                 </TableCell>
                 <TableCell align="center">
