@@ -10,14 +10,26 @@ export const PaymentsListProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchPaymentsByMember = useCallback(async (name) => {
+  const fetchRoundPayments = useCallback(async ({roundNumber, AccessCode}) => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://jumma-backend-vercel.vercel.app/api/payments/member/${name}`);
+      const res = await axios.get(`https://jumma-backend.onrender.com/api/payments/round/${roundNumber}`,({params:{AccessCode: AccessCode}}));
+      if (!res.status === 200) throw new Error('Failed to fetch payments');
+      return res.data;
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      setLoading(false);
+      throw err;
+    }
+  }, []);
+
+  const fetchPaymentsByMember = useCallback(async ({id, AccessCode}) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://jumma-backend.onrender.com/api/payments/member/${id}`,({params:{AccessCode: AccessCode}}));
       setPayments(response.data.payments);
       setMember(response.data.member);
       setLoading(false);
-      console.log('Payments fetched successfully:', response.data);
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -32,7 +44,8 @@ export const PaymentsListProvider = ({ children }) => {
       member,
       loading,
       error,
-      fetchPaymentsByMember
+      fetchPaymentsByMember,
+      fetchRoundPayments
     }}>
       {children}
     </PaymentsListContext.Provider>

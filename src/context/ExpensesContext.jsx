@@ -13,17 +13,16 @@ export const ExpensesProvider = ({ children }) => {
   const {fetchWalletBalance} = useContext(WalletContext);
   const { fetchMembers } = useContext(MembersContext);
 
-  const addExpense = async ({description,amount,date,balanceLeft,roundId}) => {
+  const addExpense = async ({description,amount,date,balanceLeft,roundId,AccessCode}) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/expenses`, 
-              {description,amount,date,balanceLeft});
-      
+      const response = await axios.post(`https://jumma-backend.onrender.com/api/rounds/${roundId}/expenses`, 
+              {description,amount,date,balanceLeft,AccessCode});
       setLoading(false);
-      await fetchWalletBalance();
-      await fetchRounds();
-      await fetchMembers();
+      await fetchWalletBalance(AccessCode);
+      await fetchRounds(AccessCode);
+      await fetchMembers(AccessCode);
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || err.message);

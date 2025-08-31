@@ -7,9 +7,13 @@ export const MembersProvider = ({ children }) => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchMembers = async () => {
+  const fetchMembers = async (AccessCode) => {
     try {
-      const res = await axios.get('https://jumma-backend-vercel.vercel.app/api/members');
+      const res = await axios.get('https://jumma-backend.onrender.com/api/members', {
+        params: {
+          AccessCode: AccessCode
+        }
+      });
       setMembers(res.data);
       setLoading(false);
     } catch (err) {
@@ -20,8 +24,9 @@ export const MembersProvider = ({ children }) => {
 
   const addMember = async (member) => {
     try {
-      const res = await axios.post('https://jumma-backend-vercel.vercel.app/api/members', member);
+      const res = await axios.post('https://jumma-backend.onrender.com/api/members', (member));
       setMembers([...members, res.data]);
+      console.log("Added Member", res.data);
       return res.data;
     } catch (err) {
       console.error(err);
@@ -31,7 +36,7 @@ export const MembersProvider = ({ children }) => {
 
   const updateMember = async (id, updates) => {
     try {
-      const res = await axios.patch(`https://jumma-backend-vercel.vercel.app/api/members/${id}`, updates);
+      const res = await axios.patch(`https://jumma-backend.onrender.com/api/members/${id}`, ({updates, AccessCode}));
       setMembers(members.map(m => m._id === id ? res.data : m));
       return res.data;
     } catch (err) {
@@ -40,9 +45,19 @@ export const MembersProvider = ({ children }) => {
     }
   };
 
+  const deleteMember = async (id) => {
+    try {
+      const res = await axios.delete(`https://jumma-backend.onrender.com/api/members/${id}`);
+      return res;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   const getMemberById = async (id) => {
     try {
-      const response = await axios.get(`/api/members/${id}`);
+      const response = await axios.get(`https://jumma-backend.onrender.com/api/members/${id}`);
       return response.data;
     } catch (err) {
       throw err.response?.data?.message || err.message;
@@ -55,7 +70,7 @@ export const MembersProvider = ({ children }) => {
   }, []);
 
   return (
-    <MembersContext.Provider value={{ members, loading, addMember, updateMember, fetchMembers, getMemberById }}>
+    <MembersContext.Provider value={{ members, loading, addMember, updateMember, fetchMembers, getMemberById, deleteMember }}>
       {children}
     </MembersContext.Provider>
   );

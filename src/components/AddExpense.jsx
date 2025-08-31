@@ -13,6 +13,9 @@ import {
   Alert,
   CircularProgress
 } from '@mui/material';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { MembersContext } from "../context/MembersContext";
 import { RoundsContext } from "../context/RoundsContext";
 import { useNavigate } from 'react-router-dom';
@@ -20,35 +23,51 @@ import { useExpenses } from '../context/ExpensesContext';
 import { WalletContext } from '../context/WalletContext';
 
 
-const AddExpense = () => {
+const AddExpense = ({AccessCode, Admin}) => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [paidBy, setPaidBy] = useState('');
   const [roundId, setRoundId] = useState('');
   const [expenseDate, setExpenseDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const { addExpense, loading, error } = useExpenses();
-  const { members } = useContext(MembersContext);
   const { rounds } = useContext(RoundsContext);
   const { balance } = useContext(WalletContext);
   
   const navigate = useNavigate();
+  const toastOptions = {
+      position: "top-right",
+      style: {
+        top: "70px",
+        rigth: "150px"
+      },
+      autoClose: 2000,
+      hideProgressBar: false,
+      newestOnTop: false,
+      pauseOnHover: true,
+      draggable: true,
+      closeOnClick: true,
+      theme: "colored"
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addExpense({ 
-        description,
-        amount: Number(amount),
-        date: expenseDate,
-        balanceLeft: Number(balance-Number(amount)),
-        roundId 
-      });
-      console.log("Expense Added");
-      navigate('/');
+      if( Admin == "YES") {
+        await addExpense({ 
+          description,
+          amount: Number(amount),
+          date: expenseDate,
+          balanceLeft: Number(balance-Number(amount)),
+          roundId,
+          AccessCode 
+        });
+        navigate('/');
+      } else {
+        toast.error("You are not authorized to add expenses", toastOptions);
+      }
     } catch (err) {
-      console.error(err);
+      toast.error("Failed to add expense", toastOptions);
     }
   };
 
@@ -124,6 +143,7 @@ const AddExpense = () => {
           </Button>
         </form>
       </Paper>
+      <ToastContainer />
     </Container>
   );
 };

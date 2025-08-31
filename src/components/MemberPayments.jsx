@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -15,10 +15,14 @@ import {
   CircularProgress
 } from '@mui/material';
 import { usePaymentsList } from '../context/PaymentsListContext';
+import { MembersContext } from '../context/MembersContext';
+import { ArrowBack } from "@mui/icons-material";
 
-const MemberPayments = () => {
-  const { name } = useParams(); // name from URL
+
+const MemberPayments = ({AccessCode}) => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [member, setMember] = useState(null);
 
   const { 
     payments, 
@@ -27,9 +31,18 @@ const MemberPayments = () => {
     fetchPaymentsByMember 
   } = usePaymentsList();
 
+  const { members, getMemberById, fetchMembers } = useContext(MembersContext);
+
   useEffect(() => {
-    fetchPaymentsByMember(name); // fetch by member name
-  }, [name, fetchPaymentsByMember]);
+    const fetchData = async () => {
+      await fetchPaymentsByMember({ id, AccessCode });
+      const mem = await getMemberById(id);
+      setMember(mem[0]);
+    };
+
+    fetchData();
+  }, [id, AccessCode, fetchPaymentsByMember]);
+
 
   if (loading) {
     return (
@@ -49,17 +62,17 @@ const MemberPayments = () => {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Button 
-        variant="outlined" 
-        onClick={() => navigate('/members')}
-        style={{ margin: '20px 0' }}
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Button
+        startIcon={<ArrowBack />}
+        onClick={() => navigate(-1)}
+        sx={{ mb: 2 }}
       >
-        Back to Members List
+        Back
       </Button>
 
       <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h4">{name}</Typography>
+        <Typography variant="h4">{member?.name}</Typography>
       </Paper>
 
       <Typography variant="h5" gutterBottom>
@@ -113,7 +126,7 @@ const MemberPayments = () => {
         </TableContainer>
       ) : (
         <Typography variant="body1" style={{ fontStyle: 'italic' }}>
-          No payments found for {name}.
+          No payments found for {member?.name}.
         </Typography>
       )}
     </Container>

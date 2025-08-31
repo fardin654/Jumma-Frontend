@@ -8,9 +8,10 @@ export const WalletProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const fetchWalletBalance = async () => {
+  const fetchWalletBalance = async (AccessCode) => {
     try {
-      const res = await axios.get("https://jumma-backend-vercel.vercel.app/api/wallets");
+      if(AccessCode == null) return;
+      const res = await axios.get("https://jumma-backend.onrender.com/api/wallets", {params: {AccessCode: AccessCode}});
       setBalance(res.data.Balance);
       setLoading(false);
     } catch (err) {
@@ -19,28 +20,12 @@ export const WalletProvider = ({ children }) => {
     }
   };
 
-  const updateWalletBalance = async (newBalance) => {
-    try {
-      const res = await axios.patch("https://jumma-backend-vercel.vercel.app/api/wallets", { Balance: newBalance });
-      setBalance(res.data.Balance);
-      return res.data;
-    } catch (err) {
-      console.error("Error updating wallet balance:", err);
-      throw err;
-    }
-  };
-
-  useEffect(() => {
-    fetchWalletBalance();
-  }, []);
-
   return (
     <WalletContext.Provider
       value={{
         balance,
         loading,
         fetchWalletBalance,
-        updateWalletBalance,
       }}
     >
       {children}

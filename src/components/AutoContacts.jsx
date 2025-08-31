@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -12,13 +12,52 @@ import {
   TableRow,
   Avatar,
   Chip,
-  Button
+  Button,
+  Box,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import { AutoContactsContext } from '../context/AutoContactsContext';
+import { Link as RouterLink } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const AutoContactsList = () => {
-  const { members, loading, error } = useContext(AutoContactsContext);
+const AutoContactsList = ({AccessCode, Admin}) => {
+  const { members, loading, error, fetchContacts, deleteContact } = useContext(AutoContactsContext);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect( () => {
+      fetchContacts(AccessCode);
+  }, [AccessCode])
+
+  const handleDeleteContact = async(id) => {
+    try{
+      const user = await deleteContact(id);
+      fetchContacts(AccessCode);
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  if (!AccessCode) {
+      return (
+        <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+          <Typography variant="h5">Authenticate to View Data</Typography>
+          <Button
+            size={isMobile ? "small" : "medium"}
+            variant="contained"
+            color="primary"
+            component={RouterLink} 
+            to="/authenticate"
+            sx={{ mt: 2 }}
+          >
+            Authenticate
+          </Button>
+        </Box>
+      );
+  }
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -45,6 +84,7 @@ const AutoContactsList = () => {
               <TableCell>Name</TableCell>
               <TableCell align="center">Contact</TableCell>
               <TableCell align="center">Description</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -63,6 +103,16 @@ const AutoContactsList = () => {
                 </TableCell>
                 <TableCell align="center" sx={{ minWidth: 250,whiteSpace: 'normal', wordBreak: 'break-word'}}>
                     {member.description || '-'}
+                </TableCell>
+                <TableCell align="center">
+                  <Button 
+                    size="small" 
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDeleteContact(member._id)}
+                  >
+                    <DeleteIcon />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -41,27 +41,33 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PaymentIcon from '@mui/icons-material/Payment';
 import PaymentsIcon from '@mui/icons-material/Payments';
 
-const Dashboard = () => {
-  const { members } = useContext(MembersContext);
+const Dashboard = ({AccessCode}) => {
+  const { members, fetchMembers } = useContext(MembersContext);
   const {
     rounds,
     currentRound,
     updatePayment,
-    completeRound,
     createRound,
+    fetchRounds
   } = useContext(RoundsContext);
-  const { balance } = useContext(WalletContext);
+  const { balance, fetchWalletBalance } = useContext(WalletContext);
   const [selectedRound, setSelectedRound] = useState(null);
+  const [nextCount, setNextCount] = useState(2);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  
 
   useEffect(() => {
     if (currentRound && !selectedRound) {
       setSelectedRound(currentRound._id);
     }
   }, [currentRound, selectedRound]);
+
+  useEffect(() => {
+    fetchRounds(AccessCode);
+    fetchWalletBalance(AccessCode);
+    fetchMembers(AccessCode);
+  }, [AccessCode]);
 
   const handleRoundChange = (e) => {
     const roundId = e.target.value;
@@ -73,10 +79,6 @@ const Dashboard = () => {
     await updatePayment(selectedRound, paymentId, { [field]: value });
   };
 
-  const handleCompleteRound = async () => {
-    await completeRound(selectedRound);
-  };
-
   const handleNewRound = async () => {
     const newRound = await createRound();
     setSelectedRound(newRound._id);
@@ -84,6 +86,7 @@ const Dashboard = () => {
     window.location.reload();
   }
 
+  const nextList = [1,2,3,4,5];
   const round = rounds.find((r) => r._id === selectedRound) || currentRound;
 
   const totalExpenses =
@@ -107,7 +110,25 @@ const Dashboard = () => {
   const nextToPay = [...sortedPayments]
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .filter(payment => payment.status === 'pending')
-    .slice(0, 2);
+    .slice(0, nextCount);
+
+  if (!AccessCode) {
+     return (
+       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+         <Typography variant="h5">Authenticate to View Data</Typography>
+         <Button
+           size={isMobile ? "small" : "medium"}
+           variant="contained"
+           color="primary"
+           component={Link} 
+           to="/authenticate"
+           sx={{ mt: 2 }}
+         >
+           Authenticate
+         </Button>
+       </Box>
+     );
+  }
 
   if (!round) {
     return (
@@ -260,54 +281,68 @@ const Dashboard = () => {
               title="Next to Pay"
               titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }}
             />
+            <FormControl sx={{  ml: 1, minWidth: 200, width: { xs: '95%', md: 'auto' }, mt: { xs: 2, md: 0 } }} size="small">
+              <InputLabel>Count</InputLabel>
+              <Select
+                value={nextCount}
+                onChange={(e) => setNextCount(Number(e.target.value))}
+                label="Count"
+              >
+                {nextList.map((count) => (
+                  <MenuItem key={count} value={count}>
+                    {count}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             <CardContent>
               {nextToPay.length > 0 ? (
                 <List>
-                  {nextToPay.map((payment, index) => {
-                    const member = members.find((m) => m.name === payment.member);
+                  {nextToPay.slice(0, nextCount).map((payment, index) => {
+                    const member = members.find(m=> m._id === payment.member);
                     return (
-                      <React.Fragment key={payment._id}>
-                        <ListItem>
-                          <ListItemAvatar>
-                            <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
-                              {member?.name?.charAt(0)}
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={member?.name}
-                            secondary={
-                              <>
-                                <Typography
-                                  component="span"
-                                  variant="body2"
-                                  color="text.primary"
-                                >
-                                  {new Date(payment.date).toLocaleDateString('en-GB', {
-                                    day: '2-digit',
-                                    month: 'short',
-                                    year: 'numeric'
-                                  })}
-                                </Typography>
-                                {` - ₹${payment.amount} paid`}
-                              </>
-                            }
-                          />
-                          <Chip
-                            label={payment.status}
-                            color={
-                              payment.status === 'paid'
-                                ? 'success'
-                                : payment.status === 'partial'
-                                ? 'warning'
-                                : 'error'
-                            }
-                            size="small"
-                          />
-                        </ListItem>
-                        {index < nextToPay.length - 1 && <Divider variant="inset" component="li" />}
-                      </React.Fragment>
-                    );
-                  })}
+                    <React.Fragment key={payment._id}>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
+                            {member?.name?.charAt(0)}
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={member?.name}
+                          secondary={
+                            <>
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                color="text.primary"
+                              >
+                                {new Date(payment.date).toLocaleDateString('en-GB', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric'
+                                })}
+                              </Typography>
+                              {` - ₹${payment.amount} paid`}
+                            </>
+                          }
+                        />
+                        <Chip
+                          label={payment.status}
+                          color={
+                            payment.status === 'paid'
+                              ? 'success'
+                              : payment.status === 'partial'
+                              ? 'warning'
+                              : 'error'
+                          }
+                          size="small"
+                        />
+                      </ListItem>
+                      {index < nextToPay.length - 1 && <Divider variant="inset" component="li" />}
+                    </React.Fragment>
+                  )})}
                 </List>
               ) : (
                 <Typography color="text.secondary" align="center">
@@ -350,11 +385,11 @@ const Dashboard = () => {
                   </TableHead>
                   <TableBody>
                     {sortedPayments.map((payment) => {
-                      const member = members.find((m) => m.name === payment.member);
                       const balance = round.fixedAmount - payment.amount<0? 0 : round.fixedAmount - payment.amount; 
+                      const member = members.find(m=> m._id === payment.member);
                       return (
                         <TableRow key={payment._id} hover>
-                          <TableCell onClick={() => navigate(`/members/${member.name}/payments`)} style={{ cursor: 'pointer' }}>
+                          <TableCell onClick={() => navigate(`/members/${payment.member}/payments`)} style={{ cursor: 'pointer' }}>
                             <Box display="flex" alignItems="center" gap={1}>
                               <Avatar sx={{ width: 32, height: 32, bgcolor: theme.palette.primary.main }}>
                                 {member?.name?.charAt(0)}
@@ -444,7 +479,7 @@ const Dashboard = () => {
         </Grid>
 
         {/* Expenses Table */}
-        <Grid item xs={12} md={6} sx={{ minWidth: { xs: 1, md: 1 }}}>
+        <Grid item xs={12} md={6} sx={{ minWidth: { xs: 1, md: 1455 }}}>
           <Card elevation={3} sx={{ height: '100%', backgroundColor: '#e6f7ff' }}>
             <CardHeader
               title={`Expense Records for Round ${round.roundNumber}`}

@@ -21,21 +21,24 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import { MembersContext } from '../context/MembersContext';
-import { Link as RouterLink } from 'react-router-dom';
-import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { RoundsContext } from '../context/RoundsContext';
+import { Link as RouterLink } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const MembersList = ({ AccessCode, Admin }) => {
+const Rounds = ({ AccessCode, Admin }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { members, loading, error, fetchMembers, deleteMember } = useContext(MembersContext);
+  const { rounds, fetchRounds, loading, completeRound, deleteRound } = useContext(RoundsContext);
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedRoundId, setSelectedRoundId] = useState(null);
+
+  useEffect(() => {
+    fetchRounds(AccessCode);
+  }, [fetchRounds, AccessCode]);
 
   const toastOptions = {
       position: "top-right",
@@ -52,32 +55,41 @@ const MembersList = ({ AccessCode, Admin }) => {
       theme: "colored"
   };
 
-  useEffect(() => {
-    fetchMembers(AccessCode);
-  }, [AccessCode, fetchMembers]);
-
-  const handleOpenDialog = (member) => {
-    setSelectedMember(member);
+  const handleOpenDialog = (id) => {
+    setSelectedRoundId(id);
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setSelectedMember(null);
+    setSelectedRoundId(null);
   };
 
   const handleConfirmDelete = async () => {
     try {
-      if (Admin === "YES" && selectedMember) {
-        await deleteMember(selectedMember._id);
-        fetchMembers(AccessCode);
+      if (Admin === "YES" && selectedRoundId) {
+        await deleteRound(selectedRoundId);
+        fetchRounds(AccessCode);
       } else {
-        toast.error("You are not authorized to delete members", toastOptions);
+        toast.error("You are not authorized to delete rounds", toastOptions);
       }
     } catch (err) {
-      toast.error("Failed to delete member", toastOptions);
+      toast.error("Error deleting round: " + err.message, toastOptions);
     } finally {
       handleCloseDialog();
+    }
+  };
+
+  const handleCompleteRound = async (id) => {
+    try {
+      if (Admin === "YES") {
+        await completeRound(id);
+        fetchRounds(AccessCode);
+      } else {
+        toast.error("You are not authorized to complete rounds", toastOptions);
+      }
+    } catch (err) {
+      toast.error("Error completing round: " + err.message, toastOptions);
     }
   };
 
@@ -100,82 +112,101 @@ const MembersList = ({ AccessCode, Admin }) => {
   }
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" gutterBottom style={{ marginTop: '20px' }}>
-        Members List
+        Rounds List - '{AccessCode}'
       </Typography>
 
       <Button
         variant="contained"
         color="primary"
-        onClick={() => navigate('/add-member')}
+        onClick={() => navigate('/create-round')}
         style={{ marginBottom: '20px' }}
       >
-        Add New Member
+        Create New Round
       </Button>
 
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Member</TableCell>
-              <TableCell align="center">Balance</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Payments</TableCell>
+              <TableCell>Round</TableCell>
+              <TableCell align="center">Start Date</TableCell>
+              <TableCell align="center">End Date</TableCell>
+              <TableCell align="center"></TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {members.map((member) => (
-              <TableRow key={member._id} hover>
-                <TableCell
-                  onClick={() => navigate(`/members/${member._id}/payments`)}
-                  style={{ cursor: 'pointer' }}
-                >
+            {rounds.map((round) => (
+              <TableRow key={round._id} hover>
+                <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar style={{ marginRight: '10px' }}>
-                      {member.name.charAt(0)}
+                      {round.roundNumber}
                     </Avatar>
-                    {member.name}
+                    Round {round.roundNumber}
                   </div>
                 </TableCell>
-                <TableCell align="center">₹{member.balance.toFixed(2)}</TableCell>
                 <TableCell align="center">
                   <Chip
-                    label={
-                      member.balance === 0
-                        ? 'In Good Standing'
-                        : member.balance < 0
-                        ? 'Need to Pay'
-                        : 'Need to be Paid'
-                    }
-                    color={
-                      member.balance === 0
-                        ? 'success'
-                        : member.balance < 0
-                        ? 'error'
-                        : 'primary'
-                    }
+                    label={new Date(round.date).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                    variant="filled"
+                    size="small"
+                    color="default"
+                    sx={{
+                      backgroundColor: '#f5f5f5',
+                      fontWeight: 500
+                    }}
                   />
                 </TableCell>
                 <TableCell align="center">
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => navigate(`/members/${member._id}/payments`)}
-                  >
-                    <VisibilityIcon />
-                  </Button>
+                  {round.isCompleted ? (
+                    <Chip
+                      label={new Date(round.endDate).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
+                      variant="filled"
+                      size="small"
+                      color="default"
+                      sx={{
+                        backgroundColor: '#f5f5f5',
+                        fontWeight: 500
+                      }}
+                    />
+                  ) : (
+                    "Active"
+                  )}
+                </TableCell>
+                <TableCell align="center">
+                  {round.isCompleted ? (
+                    <Button size="small" variant="contained" disabled>
+                      Completed
+                    </Button>
+                  ) : (
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={() => handleCompleteRound(round._id)}
+                    >
+                      Mark Completed
+                    </Button>
+                  )}
                 </TableCell>
                 <TableCell align="center">
                   <Button
                     size="small"
                     variant="contained"
                     color="error"
-                    onClick={() => handleOpenDialog(member)}
+                    onClick={() => handleOpenDialog(round._id)}
                   >
                     <DeleteIcon />
                   </Button>
@@ -191,8 +222,7 @@ const MembersList = ({ AccessCode, Admin }) => {
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete{" "}
-            <strong>{selectedMember?.name}</strong>? This action cannot be undone.
+            Are you sure you want to delete this round? This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -209,4 +239,4 @@ const MembersList = ({ AccessCode, Admin }) => {
   );
 };
 
-export default MembersList;
+export default Rounds;

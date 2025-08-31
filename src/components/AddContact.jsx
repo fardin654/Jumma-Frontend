@@ -16,7 +16,7 @@ import {
 import { AutoContactsContext } from '../context/AutoContactsContext';
 import { useNavigate } from 'react-router-dom';
 
-const AddUpdateContact = () => {
+const AddUpdateContact = ({AccessCode, Admin}) => {
   const [mode, setMode] = useState('add');
   const [selectedContactId, setSelectedContactId] = useState('');
   const [name, setName] = useState('');
@@ -31,7 +31,6 @@ const AddUpdateContact = () => {
     setContact('');
     setDescription('');
     setSelectedContactId('');
-    console.log(members);
   }, [mode]);
 
   // Pre-fill form when a contact is selected for update
@@ -50,7 +49,11 @@ const AddUpdateContact = () => {
     e.preventDefault();
     try {
       if (mode === 'add') {
-        await addContact({ name, contact, description });
+        if(AccessCode) {
+          await addContact({ name, contact, description, AccessCode });
+        } else {
+          console.log("View Access Only")
+        }
       } else if (mode === 'update' && selectedContactId) {
         await updateContact(selectedContactId, { name, contact, description });
       }

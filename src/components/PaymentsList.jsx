@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useContext} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
@@ -22,23 +22,26 @@ import {
   CardContent
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
+import { usePaymentsList } from '../context/PaymentsListContext';
+import { MembersContext } from "../context/MembersContext";
 
-function PaymentsList() {
+function PaymentsList({AccessCode}) {
   const { roundNumber } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const {fetchRoundPayments} = usePaymentsList();
+  const {members, fetchMembers} = useContext(MembersContext);
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`https://jumma-backend-vercel.vercel.app/api/payments/round/${roundNumber}`);
-        if (!res.ok) throw new Error('Failed to fetch payments');
-        const data = await res.json();
+        const data = await fetchRoundPayments({roundNumber, AccessCode});
         setPayments(data.payments);
+        fetchMembers(AccessCode);
       } catch (error) {
         console.error("Error fetching payments:", error);
         setError(error.message);
@@ -138,7 +141,9 @@ function PaymentsList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {payments.map((payment) => (
+                {payments.map((payment) => {
+                  const member = members.find(m => m._id === payment.member);
+                  return (
                   <TableRow 
                     key={payment._id}
                     hover
@@ -168,9 +173,9 @@ function PaymentsList() {
                           bgcolor: theme.palette.primary.main,
                           fontSize: '0.875rem'
                         }}>
-                          {payment.member?.charAt(0)?.toUpperCase()}
+                          {member?.name?.charAt(0)?.toUpperCase()}
                         </Avatar>
-                        {payment.member}
+                        {member?.name}
                       </Box>
                     </TableCell>
                     <TableCell>
@@ -186,7 +191,7 @@ function PaymentsList() {
                       />
                     </TableCell>
                   </TableRow>
-                ))}
+                )})}
               </TableBody>
             </Table>
           </TableContainer>
