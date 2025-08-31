@@ -67,7 +67,7 @@ const Dashboard = ({AccessCode}) => {
     fetchRounds(AccessCode);
     fetchWalletBalance(AccessCode);
     fetchMembers(AccessCode);
-  }, [AccessCode]);
+  }, [AccessCode, rounds, fetchRounds]);
 
   const handleRoundChange = (e) => {
     const roundId = e.target.value;
@@ -134,7 +134,6 @@ const Dashboard = ({AccessCode}) => {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
         <Typography variant="h5">No active round found</Typography>
-        <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
         <Button 
           size={isMobile ? "small" : "medium"}
           variant="contained"
@@ -145,16 +144,6 @@ const Dashboard = ({AccessCode}) => {
         >
           Create New Round
         </Button>
-        <Button
-          size={isMobile ? "small" : "medium"}
-          variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
-          onClick = {() => fetchRounds(AccessCode)}
-        >
-          Fetch Rounds
-        </Button>
-        </Box>
       </Box>
     );
   }
