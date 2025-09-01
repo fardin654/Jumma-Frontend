@@ -154,7 +154,7 @@ const AddPayment = ({AccessCode, Admin}) => {
             </Select>
           </FormControl>
 
-          { Admin === "NO" && 
+          {Admin !== "YES" && 
           <FormControl fullWidth margin="normal" required>
             <InputLabel>Payment Type</InputLabel>
             <Select
@@ -167,8 +167,7 @@ const AddPayment = ({AccessCode, Admin}) => {
                 </MenuItem>
                 <MenuItem key={"expense"} value={"expense"}>
                   Expense
-                </MenuItem>
-              
+                </MenuItem>              
             </Select>
           </FormControl>}
           
