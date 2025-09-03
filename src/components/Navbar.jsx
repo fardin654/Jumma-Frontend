@@ -94,7 +94,7 @@ const Navbar = ({ AccessCode, Admin, setAccessCode }) => {
             fontSize: { xs: '1.8rem', sm: '2rem' }
           }} />
           <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
-            Jumma Expenses
+            PayCircle
           </Typography>
         </Box>
 

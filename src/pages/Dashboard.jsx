@@ -121,24 +121,6 @@ const Dashboard = ({AccessCode}) => {
     .filter(payment => payment.status === 'pending')
     .slice(0, nextCount);
 
-  if (loading) {
-    return (
-      <Box 
-        display="flex" 
-        justifyContent="center" 
-        alignItems="center" 
-        minHeight="70vh" 
-        flexDirection="column"
-      >
-        <CircularProgress size={60} thickness={5} color="primary" />
-        <Typography variant="h6" mt={2} color="text.secondary">
-          Fetching your dashboard...
-        </Typography>
-      </Box>
-    );
-  }
-
-
   if (!AccessCode) {
      return (
        <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
@@ -157,6 +139,23 @@ const Dashboard = ({AccessCode}) => {
      );
   }
 
+  if (loading) {
+    return (
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="70vh" 
+        flexDirection="column"
+      >
+        <CircularProgress size={60} thickness={5} color="primary" />
+        <Typography variant="h6" mt={2} color="text.secondary">
+          Fetching your dashboard...
+        </Typography>
+      </Box>
+    );
+  }
+  
   if (!round) {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
