@@ -36,7 +36,8 @@ function PaymentsList({AccessCode}) {
     const fetchPayments = async () => {
       try {
         await fetchRoundPayments({ roundNumber, AccessCode });
-        await fetchMembers(AccessCode);
+        if(!members)
+          await fetchMembers(AccessCode);
       } catch (error) {
         console.error("Error fetching payments:", error);
       } 

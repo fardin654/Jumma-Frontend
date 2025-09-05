@@ -52,6 +52,7 @@ const AddPayment = ({AccessCode, Admin}) => {
           paidBy, 
           roundId, 
           date: paymentDate,
+          paymentType,
           AccessCode: AccessCode
         });
         navigate('/');
@@ -154,7 +155,6 @@ const AddPayment = ({AccessCode, Admin}) => {
             </Select>
           </FormControl>
 
-          {Admin !== "YES" && 
           <FormControl fullWidth margin="normal" required>
             <InputLabel>Payment Type</InputLabel>
             <Select
@@ -169,7 +169,7 @@ const AddPayment = ({AccessCode, Admin}) => {
                   Expense
                 </MenuItem>              
             </Select>
-          </FormControl>}
+          </FormControl>
           
           <Button 
             type="submit" 

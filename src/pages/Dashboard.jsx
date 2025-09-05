@@ -68,11 +68,12 @@ const Dashboard = ({AccessCode}) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([
-        fetchRounds(AccessCode),
-        fetchWalletBalance(AccessCode),
-        fetchMembers(AccessCode)
-      ]);
+      if(rounds == null || rounds.length===0)
+        await fetchRounds(AccessCode)
+      if(balance == null)
+        await fetchWalletBalance(AccessCode)
+      if(members == null || members.length===0)
+        await fetchMembers(AccessCode)
       setLoading(false);
     };
     if (AccessCode) fetchData();
@@ -83,17 +84,6 @@ const Dashboard = ({AccessCode}) => {
     setSelectedRound(roundId);
     if (roundId === 'new') navigate('/create-round');
   };
-
-  const handlePaymentUpdate = async (paymentId, field, value) => {
-    await updatePayment(selectedRound, paymentId, { [field]: value });
-  };
-
-  const handleNewRound = async () => {
-    const newRound = await createRound();
-    setSelectedRound(newRound._id);
-    navigate('/');
-    window.location.reload();
-  }
 
   const nextList = [1,2,3,4,5];
   const round = rounds.find((r) => r._id === selectedRound) || currentRound;

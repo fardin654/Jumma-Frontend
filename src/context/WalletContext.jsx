@@ -5,7 +5,7 @@ import axios from "axios";
 export const WalletContext = createContext();
 
 export const WalletProvider = ({ children }) => {
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchWalletBalance = async (AccessCode) => {

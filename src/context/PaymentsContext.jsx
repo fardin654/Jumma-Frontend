@@ -14,15 +14,15 @@ export const PaymentsProvider = ({ children }) => {
   const { fetchWalletBalance } = useContext(WalletContext);
   const { fetchMembers } = useContext(MembersContext);
 
-  const addPayment = async ({ amount, paidBy, roundId, date, AccessCode }) => {
+  const addPayment = async ({ amount, paidBy, roundId, date, paymentType, AccessCode }) => {
     try {
       setLoading(true);
       setError(null);
-      console.log('Adding payment with data:', { amount, paidBy, roundId, date, AccessCode });
       const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/payments`, {
         amount,
         paidBy,
         date,
+        paymentType,
         AccessCode
       });
 

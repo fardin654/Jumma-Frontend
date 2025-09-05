@@ -55,7 +55,7 @@ const MembersList = ({ AccessCode, Admin }) => {
 
   useEffect(() => {
     if(AccessCode)
-      fetchMembers(AccessCode);
+      !members? fetchMembers(AccessCode): null;
   }, [AccessCode]);
 
   const handleOpenDialog = (member) => {
@@ -112,7 +112,7 @@ const MembersList = ({ AccessCode, Admin }) => {
         >
           <CircularProgress size={60} thickness={5} color="primary" />
           <Typography variant="h6" mt={2} color="text.secondary">
-            Fetching your dashboard...
+            Fetching Members...
           </Typography>
         </Box>
       );

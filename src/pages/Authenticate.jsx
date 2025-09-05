@@ -112,8 +112,8 @@ const AuthenticationPage = ({setAccessCode, setAdmin, AccessCode}) => {
         setAdmin(user.Admin);
         navigate("/");
       }
-      if(error){
-        toast.error(message.text, toastOptions);
+      else {
+        toast.error("Invalid Credentials", toastOptions);
       }
     } catch (err) {
       toast.error("Login failed", toastOptions);
@@ -136,16 +136,15 @@ const AuthenticationPage = ({setAccessCode, setAdmin, AccessCode}) => {
     }
   };
 
-  const handleViewSubmit = (e) => {
+  const handleViewSubmit = async (e) => {
     e.preventDefault();
-    try{
-      setAccessCode(temp);
-      EnterByAccessCode(temp);
-      if(error){
-        toast.error(message.text, toastOptions);
-      }
-    } catch(err){
-      toast.error("Error fetching user by access code", toastOptions);
+    setAccessCode(temp);
+    const result = await EnterByAccessCode(temp);
+    if(result){
+      navigate('/');
+    }
+    else {
+      toast.error("Authentication Failed", toastOptions);
     }
   };
 
