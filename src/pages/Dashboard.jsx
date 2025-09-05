@@ -129,7 +129,7 @@ const Dashboard = ({AccessCode}) => {
      );
   }
 
-  if (loading) {
+   if (loading) {
     return (
       <Box 
         display="flex" 
@@ -145,7 +145,7 @@ const Dashboard = ({AccessCode}) => {
       </Box>
     );
   }
-  
+
   if (!round) {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
