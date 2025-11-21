@@ -4,6 +4,7 @@ import axios from 'axios';
 import { RoundsContext } from './RoundsContext';
 import { WalletContext } from './WalletContext';
 import { MembersContext } from './MembersContext';
+import { URL } from '../config';
 
 const PaymentsContext = createContext();
 
@@ -18,7 +19,7 @@ export const PaymentsProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/payments`, {
+      const response = await axios.post(`${URL}/rounds/${roundId}/payments`, {
         amount,
         paidBy,
         date,

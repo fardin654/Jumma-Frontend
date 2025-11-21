@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { URL } from '../config';
 
 // Create User Context
 const UsersContext = createContext();
@@ -42,7 +43,7 @@ export const UsersProvider = ({ children }) => {
  const registerUser = async (username, email, password, accessCode) => {
   try {
     setLoading(true);
-    const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/user/register`, {
+    const response = await axios.post(`${URL}/user/register`, {
       username, email, password, AccessCode: accessCode
     });
 
@@ -67,7 +68,7 @@ export const UsersProvider = ({ children }) => {
   const loginUser = async (username, password) => {
     try {
       setLoading(true);
-      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/user/login`,{email:username, password})
+      const response = await axios.post(`${URL}/user/login`,{email:username, password})
         if(response.status === 200){
             const userData = {
               AccessCode: response.data.AccessCode,
@@ -93,7 +94,7 @@ export const UsersProvider = ({ children }) => {
   const EnterByAccessCode = async (accessCode) => {
     try{
         setLoading(true);
-        const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/user/authenticate`,{AccessCode: accessCode})
+        const response = await axios.post(`${URL}/user/authenticate`,{AccessCode: accessCode})
         if(response.status === 200){
             localStorage.setItem("userData", JSON.stringify({
                 AccessCode: accessCode,
@@ -109,6 +110,39 @@ export const UsersProvider = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const res = await axios.post(`${URL}/forgot-password/send-otp`, { email });
+      return { success: true, message: res.data.message };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message };
+    }
+  };
+
+  const verifyOtp = async (email, otp) => {
+    try {
+      const res = await axios.post(`${URL}/forgot-password/verify-otp`, { email, otp });
+      return { success: true, message: res.data.message };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message };
+    }
+  };
+
+  const resetPassword = async (email, otp, newPassword) => {
+    try {
+      const res = await axios.post(`${URL}/forgot-password/reset-password`, {
+        email,
+        otp,
+        newPassword,
+      });
+      return { success: true, message: res.data.message };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message };
+    }
+  };
+
+
+
   const clearError = () => {
     setError(null);
   };
@@ -123,6 +157,9 @@ export const UsersProvider = ({ children }) => {
       loginUser,
       logoutUser,
       EnterByAccessCode,
+      forgotPassword,
+      verifyOtp,
+      resetPassword,
       clearError
     }}>
       {children}

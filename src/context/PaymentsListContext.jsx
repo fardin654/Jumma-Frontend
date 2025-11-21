@@ -1,6 +1,7 @@
 // context/PaymentsContext.js
 import { createContext, useContext, useState, useEffect,useCallback } from 'react';
 import axios from 'axios';
+import { URL } from '../config';
 
 const PaymentsListContext = createContext();
 
@@ -14,7 +15,7 @@ export const PaymentsListProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await axios.get(`https://jumma-backend-vercel.vercel.app/api/payments/round/${roundNumber}`,({params:{AccessCode: AccessCode}}));
+      const res = await axios.get(`${URL}/payments/round/${roundNumber}`,({params:{AccessCode: AccessCode}}));
       if (res.status !== 200) throw new Error('Failed to fetch payments');
       setPayments(res.data.payments);
       return res.data;
@@ -29,7 +30,7 @@ export const PaymentsListProvider = ({ children }) => {
   const fetchPaymentsByMember = useCallback(async ({id, AccessCode}) => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://jumma-backend-vercel.vercel.app/api/payments/member/${id}`,({params:{AccessCode: AccessCode}}));
+      const response = await axios.get(`${URL}/payments/member/${id}`,({params:{AccessCode: AccessCode}}));
       setPayments(response.data.payments);
       setMember(response.data.member);
       setLoading(false);

@@ -51,7 +51,8 @@ const AuthenticationPage = ({setAccessCode, setAdmin, AccessCode}) => {
     logoutUser, 
     loading, 
     error,
-    clearError 
+    clearError,
+    forgotPassword
   } = useUsers();
 
   // Login form state
@@ -233,6 +234,15 @@ const AuthenticationPage = ({setAccessCode, setAdmin, AccessCode}) => {
                 )
               }}
             />
+            <Typography
+              variant="body2"
+              color="error"
+              align="center"
+              style={{ marginTop: 15, cursor: "pointer", textDecoration: "underline" }}
+              onClick={() => navigate("/forgot-password")}
+            >
+              Forgot Password?
+            </Typography>
             <Button 
               type="submit" 
               variant="contained" 

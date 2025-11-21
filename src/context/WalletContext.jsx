@@ -1,6 +1,7 @@
 // src/context/WalletContext.js
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { URL } from '../config';
 
 export const WalletContext = createContext();
 
@@ -11,7 +12,7 @@ export const WalletProvider = ({ children }) => {
   const fetchWalletBalance = async (AccessCode) => {
     try {
       if(AccessCode == null) return;
-      const res = await axios.get("https://jumma-backend-vercel.vercel.app/api/wallets", {params: {AccessCode: AccessCode}});
+      const res = await axios.get(`${URL}/wallets`, {params: {AccessCode: AccessCode}});
       setBalance(res.data.Balance);
       setLoading(false);
     } catch (err) {

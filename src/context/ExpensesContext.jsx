@@ -3,6 +3,7 @@ import axios from 'axios';
 import { RoundsContext } from './RoundsContext';
 import { WalletContext } from './WalletContext';
 import { MembersContext } from './MembersContext';
+import { URL } from '../config';
 
 const ExpensesContext = createContext();
 
@@ -17,7 +18,7 @@ export const ExpensesProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/expenses`, 
+      const response = await axios.post(`${URL}/rounds/${roundId}/expenses`, 
               {description,amount,date,balanceLeft,AccessCode});
       setLoading(false);
       await fetchWalletBalance(AccessCode);

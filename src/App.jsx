@@ -10,6 +10,7 @@ import {AutoContactsProvider} from './context/AutoContactsContext';
 import {RequestsProvider} from './context/RequestsContext';
 import Dashboard from './pages/Dashboard';
 import AuthenticationPage from './pages/Authenticate';
+import ForgotPasswordPage from './pages/ForgotPassword';
 import AddMember from './pages/AddMember';
 import AddPayment from './pages/AddPayment';
 import Navbar from './components/Navbar';
@@ -68,6 +69,7 @@ function App() {
                   <Route path="/add-contact" element={<AddContact AccessCode={AccessCode} Admin={Admin}/>} />
                   <Route path="/rounds" element={<Rounds AccessCode={AccessCode} Admin={Admin}/>} />
                   <Route path="/requests" element={<Requests AccessCode={AccessCode} Admin={Admin}/>} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage setAdmin={setAdmin} setAccessCode={setAccessCode}/>} />
                 </Routes>
               </div>
               <Footer />

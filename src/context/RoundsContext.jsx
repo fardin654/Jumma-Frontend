@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { URL } from '../config';
 
 export const RoundsContext = createContext();
 
@@ -10,7 +11,7 @@ export const RoundsProvider = ({ children }) => {
 
   const fetchRounds = async (AccessCode) => {
     try {
-      const res = await axios.get('https://jumma-backend-vercel.vercel.app/api/rounds',{params: {AccessCode: AccessCode}});
+      const res = await axios.get(`${URL}/rounds`,{params: {AccessCode: AccessCode}});
       const rounds = res.data;
       
       setRounds(rounds); 
@@ -31,7 +32,7 @@ export const RoundsProvider = ({ children }) => {
 
   const fetchRoundById = async (id) => {
     try {
-      const res = await axios.get(`https://jumma-backend-vercel.vercel.app/api/rounds/${id}`);
+      const res = await axios.get(`${URL}/rounds/${id}`);
       return res.data;
     } catch (err) {
       console.error(err);
@@ -41,7 +42,7 @@ export const RoundsProvider = ({ children }) => {
 
   const createRound = async (fixedAmount) => {
     try {
-      const res = await axios.post('https://jumma-backend-vercel.vercel.app/api/rounds', fixedAmount);
+      const res = await axios.post('${URL}/rounds', fixedAmount);
       setRounds(prevRounds => [...prevRounds, res.data]);
       setCurrentRound(res.data);
       return res.data;
@@ -73,7 +74,7 @@ export const RoundsProvider = ({ children }) => {
   const completeRound = async (roundId) => {
     try {
       setLoading(true);
-      const res = await axios.patch(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}/complete`);
+      const res = await axios.patch(`${URL}/rounds/${roundId}/complete`);
       setLoading(false);
       return res.data;
     } catch (err) {
@@ -85,7 +86,7 @@ export const RoundsProvider = ({ children }) => {
   const deleteRound = async (roundId) => {
     try {
       setLoading(true);
-      const res = await axios.delete(`https://jumma-backend-vercel.vercel.app/api/rounds/${roundId}`);
+      const res = await axios.delete(`${URL}/rounds/${roundId}`);
       setLoading(false);
       return res.data;
     } catch (err) {

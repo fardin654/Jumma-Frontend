@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { URL } from '../config';
 
 export const AutoContactsContext = createContext();
 
@@ -9,7 +10,7 @@ export const AutoContactsProvider = ({ children }) => {
 
   const fetchContacts = async (AccessCode) => {
     try {
-      const res = await axios.get('https://jumma-backend-vercel.vercel.app/api/contacts',{params: {
+      const res = await axios.get(`${URL}/contacts`,{params: {
           AccessCode: AccessCode
       }});
       setMembers(res.data);
@@ -22,7 +23,7 @@ export const AutoContactsProvider = ({ children }) => {
 
   const addContact = async (member) => {
     try {
-      const res = await axios.post('https://jumma-backend-vercel.vercel.app/api/contacts', member);
+      const res = await axios.post(`${URL}/contacts`, member);
       setMembers([...members, res.data]);
       return res.data;
     } catch (err) {
@@ -33,7 +34,7 @@ export const AutoContactsProvider = ({ children }) => {
 
   const updateContact = async (id, updates) => {
     try {
-      const res = await axios.patch(`https://jumma-backend-vercel.vercel.app/api/contacts/${id}`, updates);
+      const res = await axios.patch(`${URL}/contacts/${id}`, updates);
       setMembers(members.map(m => m._id === id ? res.data : m));
       return res.data;
     } catch (err) {
@@ -44,7 +45,7 @@ export const AutoContactsProvider = ({ children }) => {
 
   const deleteContact = async (id) => {
     try {
-      const res = await axios.delete(`https://jumma-backend-vercel.vercel.app/api/contacts/${id}`);
+      const res = await axios.delete(`${URL}/contacts/${id}`);
       return res;
     } catch (err) {
       console.error(err);
